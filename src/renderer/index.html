@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="./index.css">
 </head>
 <body>
-    
+    <header class="top">
+    <h1 id="title">Start downloading</h1>
+    <form id="urlForm" class="urlform">
+      <label class="sr" for="url">Video URL</label>
+      <input id="url" type="url" placeholder="Paste the video link here." autocomplete="off" spellcheck="false" required>
+      <button id="fetchBtn" class="primary" type="submit">Get Info</button>
+    </form>
+    <p id="msg" class="msg" role="status"></p>
+    </header>
 </body>
 </html>
