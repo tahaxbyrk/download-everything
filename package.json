@@ -1,0 +1,31 @@
+{
+  "name": "download-everything",
+  "version": "1.0.0",
+  "description": "A simple desktop video and audio downloader based on yt-dlp and Electron.",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tahaxbyrk/download-everything.git"
+  },
+  "keywords": [
+    "yt-dlp",
+    "electron",
+    "downloader",
+    "video",
+    "audio"
+  ],
+  "author": "tahaxbyrk",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/tahaxbyrk/download-everything/issues"
+  },
+  "homepage": "https://github.com/tahaxbyrk/download-everything#readme",
+  "devDependencies": {
+    "electron": "^45.4.1"
+  }
+}
