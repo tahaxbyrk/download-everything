@@ -8,6 +8,7 @@ const createMainWindow = () => {
         minWidth: 420, minHeight: 320,
         show: false,
         title: 'Download Everything',
+        autoHideMenuBar: true,
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
