@@ -8,7 +8,8 @@
 .list-head h2 { 
     margin: 0; 
     font-size: 1rem; 
-    font-weight: 600; 
+    font-weight: 600;
+    user-select: none;
 }
 
 #count { 
@@ -18,4 +19,5 @@
 .empty { 
     padding: 32px 24px; 
     color: var(--muted); 
+    user-select: none;
 }
