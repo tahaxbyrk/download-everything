@@ -1,0 +1,6 @@
+:root {
+  --font-sans: "Bahnschrift", "Segoe UI", system-ui, sans-serif;
+  --font-size-base: 15px;
+  --font-size-small: .85rem;
+  --radius: 4px;
+}

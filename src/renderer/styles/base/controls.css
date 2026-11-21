@@ -1,0 +1,22 @@
+input[type=url], select {
+  font: inherit; 
+  color: inherit; 
+  background: var(--bg);
+  border: 1px solid var(--line); 
+  border-radius: var(--radius); 
+  padding: 9px 12px;
+}
+
+button {
+  font: inherit; 
+  color: inherit; 
+  background: transparent; 
+  cursor: pointer;
+  border: 1px solid var(--line); 
+  border-radius: var(--radius); 
+  padding: 8px 14px;
+}
+
+button:hover { border-color: var(--muted); }
+button:disabled { opacity: .5; cursor: default; }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
