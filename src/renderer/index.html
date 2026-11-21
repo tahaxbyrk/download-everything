@@ -19,13 +19,34 @@
     </header>
 
     <main>
-    <section class="downloads">
-      <div class="list-head">
-        <h2>Downloads</h2>
-        <span id="count"></span>
+      <section id="options" class="options" hidden>
+      <img id="thumb" alt="">
+      <div class="info">
+        <h2 id="vTitle"></h2>
+        <p id="vMeta"></p>
       </div>
-      <p id="empty" class="empty">No download yet. Paste a link above.</p>
-    </section>
+      <div class="controls">
+        <fieldset id="modes" class="modes">
+          <legend class="sr">Content to download</legend>
+          <label><input type="radio" name="mode" value="both" checked><span>Video + Audio</span></label>
+          <label><input type="radio" name="mode" value="audio"><span>Only Audio</span></label>
+          <label><input type="radio" name="mode" value="video"><span>Only Video</span></label>
+        </fieldset>
+        <div id="qualityWrap" class="quality">
+          <label for="quality">Quality</label>
+          <select id="quality"></select>
+        </div>
+        <span id="estimate" class="estimate"></span>
+      </div>
+      </section>
+
+      <section class="downloads">
+        <div class="list-head">
+          <h2>Downloads</h2>
+          <span id="count"></span>
+        </div>
+        <p id="empty" class="empty">No download yet. Paste a link above.</p>
+      </section>
     </main>
 
     <script type="module" src="./index.js"></script>

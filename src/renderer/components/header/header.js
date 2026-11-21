@@ -1,5 +1,8 @@
+import { backend } from '../../services/api.js';
+
 const form = document.querySelector('#urlForm');
 const urlInput = document.querySelector('#url');
+const fetchBtn = document.querySelector('#fetchBtn');
 const msg = document.querySelector('#msg');
 
 function setMsg(text, isError = false) {
@@ -7,9 +10,20 @@ function setMsg(text, isError = false) {
   msg.classList.toggle('error', isError);
 }
 
-export function initHeader() {
-  form.addEventListener('submit', (e) => {
+export function initHeader({ onInfo, onError }) {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    setMsg(`Connection received: ${urlInput.value.trim()}`);
+    const url = urlInput.value.trim();
+    setMsg('Information is being received...');
+    fetchBtn.disabled = true;
+    try {
+      onInfo({ ...(await backend.getInfo(url)), url });
+      setMsg('');
+    } catch {
+      onError();
+      setMsg('No information could be obtained from this link. Please check the link and try again.', true);
+    } finally {
+      fetchBtn.disabled = false;
+    }
   });
 }

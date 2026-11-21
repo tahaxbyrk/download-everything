@@ -1,3 +1,5 @@
 import { initHeader } from './components/header/header.js';
+import { initOptions, showOptions, hideOptions } from './components/options/options.js';
 
-initHeader();
+initHeader({ onInfo: showOptions, onError: hideOptions });
+initOptions();
