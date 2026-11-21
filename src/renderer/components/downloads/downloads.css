@@ -1,0 +1,21 @@
+.list-head { 
+    display: flex; 
+    align-items: baseline; 
+    gap: 10px; 
+    padding: 20px 24px 8px; 
+}
+
+.list-head h2 { 
+    margin: 0; 
+    font-size: 1rem; 
+    font-weight: 600; 
+}
+
+#count { 
+    color: var(--muted); 
+}
+
+.empty { 
+    padding: 32px 24px; 
+    color: var(--muted); 
+}
