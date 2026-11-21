@@ -2,7 +2,7 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
 
-const createMainWindow = () => {
+const createMainWindow = ({ preload, isDev }) => {
     const window = new BrowserWindow({
         width: 800, height: 600,
         minWidth: 420, minHeight: 320,
@@ -10,6 +10,7 @@ const createMainWindow = () => {
         title: 'Download Everything',
         autoHideMenuBar: true,
         webPreferences: {
+            preload,
             contextIsolation: true,
             nodeIntegration: false,
             sandbox: true,
