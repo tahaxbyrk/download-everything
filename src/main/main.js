@@ -11,6 +11,7 @@ const binDir = app.isPackaged
   : path.join(__dirname, '../../bin');
 
 let mainWindow = null;
+let manager = null;
 
 const openMainWindow = () => {
     mainWindow = createMainWindow({
@@ -21,7 +22,7 @@ const openMainWindow = () => {
 };
 
 app.whenReady().then(() => {
-    const manager = new DownloadManager({
+    manager = new DownloadManager({
         ytdlp: createYtDlp({ binDir }),
         outputDir: app.getPath('downloads'),
     });

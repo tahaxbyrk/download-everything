@@ -27,6 +27,44 @@ class DownloadManager extends EventEmitter {
     return pub(job);
   }
 
+  pause(id) {
+    const job = this.jobs.get(id);
+    if (!job || !['queued', 'downloading'].includes(job.status)) return;
+    this._stop(job);
+    this._setStatus(job, 'paused', { speed: 0, eta: 0 });
+    this._schedule();
+  }
+
+  resume(id) {
+    const job = this.jobs.get(id);
+    if (!job || !['paused', 'error'].includes(job.status)) return;
+    this._setStatus(job, 'queued', { error: null });
+    this._schedule();
+  }
+
+  cancel(id) {
+    const job = this.jobs.get(id);
+    if (!job || ['completed', 'cancelled'].includes(job.status)) return;
+    this._stop(job);
+    this._setStatus(job, 'cancelled', { speed: 0, eta: 0 });
+    this._schedule();
+  }
+
+  remove(id) {
+    const job = this.jobs.get(id);
+    if (!job) return;
+    this._stop(job);
+    this.jobs.delete(id);
+    this._schedule();
+  }
+
+  shutdown() {
+    for (const job of this.jobs.values()) {
+      this._stop(job);
+      if (['queued', ...ACTIVE_STATUSES].includes(job.status)) job.status = 'paused';
+    }
+  }
+
   _schedule() {
     let active = [...this.jobs.values()].filter((j) => ACTIVE_STATUSES.includes(j.status)).length;
     for (const job of this.jobs.values()) {
@@ -57,7 +95,7 @@ class DownloadManager extends EventEmitter {
         const actual = this._fileSize(job.outputPath) || job.downloadedBytes;
         this._setStatus(job, 'completed', { totalBytes: actual, downloadedBytes: actual, speed: 0, eta: 0 });
       } else {
-        this._setStatus(job, 'error', { error: error || `yt-dlp exited with code ${code}.`, speed: 0, eta: 0 });
+        this._setStatus(job, 'error', { error: error || `yt-dlp ${code} exited with code`, speed: 0, eta: 0 });
       }
       this._schedule();
     });
@@ -76,6 +114,13 @@ class DownloadManager extends EventEmitter {
   _fileSize(file) {
     if (!file) return 0;
     try { return fs.statSync(path.isAbsolute(file) ? file : path.join(this.outputDir, file)).size; } catch { return 0; }
+  }
+
+  _stop(job) {
+    const rt = this.runtime.get(job.id);
+    if (!rt) return;
+    this.runtime.delete(job.id);
+    rt.handle?.kill();
   }
 
   _setStatus(job, status, patch = {}) {
