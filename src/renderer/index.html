@@ -37,6 +37,7 @@
           <select id="quality"></select>
         </div>
         <span id="estimate" class="estimate"></span>
+        <button id="startBtn" class="primary" type="button">Download</button>
       </div>
       </section>
 
@@ -45,9 +46,25 @@
           <h2>Downloads</h2>
           <span id="count"></span>
         </div>
+        <div class="cols head" aria-hidden="true">
+          <span>File</span><span>Type</span><span>Size</span><span>Speed</span><span>Remaining</span><span>State</span><span></span>
+        </div>
+        <ul id="list" class="list"></ul>
         <p id="empty" class="empty">No download yet. Paste a link above.</p>
       </section>
     </main>
+
+    <template id="rowTpl">
+      <li class="row" data-status="">
+        <span class="name"></span>
+        <span class="c-ext"><b></b><small></small></span>
+        <span class="c-size"></span>
+        <span class="c-speed"></span>
+        <span class="c-eta"></span>
+        <span class="c-status"></span>
+        <span class="bar"><i></i></span>
+      </li>
+    </template>
 
     <script type="module" src="./index.js"></script>
 </body>

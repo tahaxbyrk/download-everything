@@ -10,6 +10,10 @@ function setMsg(text, isError = false) {
   msg.classList.toggle('error', isError);
 }
 
+export function clearUrl() {
+  urlInput.value = '';
+}
+
 export function initHeader({ onInfo, onError }) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();

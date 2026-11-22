@@ -1,3 +1,4 @@
+import { backend } from '../../services/api.js';
 import { formatBytes, formatTime } from '../../utils/format.js';
 
 const panel = document.querySelector('#options');
@@ -8,6 +9,7 @@ const modes = document.querySelector('#modes');
 const qualityWrap = document.querySelector('#qualityWrap');
 const quality = document.querySelector('#quality');
 const estimate = document.querySelector('#estimate');
+const startBtn = document.querySelector('#startBtn');
 
 let currentInfo = null;
 
@@ -47,7 +49,21 @@ export function hideOptions() {
   currentInfo = null;
 }
 
-export function initOptions() {
+export function initOptions({ onStarted }) {
   modes.addEventListener('change', syncOptions);
   quality.addEventListener('change', syncOptions);
+
+  startBtn.addEventListener('click', async () => {
+    const mode = selectedMode();
+    const format = selectedFormat();
+    await backend.start({
+      url: currentInfo.url, title: currentInfo.title, mode,
+      height: mode === 'audio' ? null : format.height,
+      ext: mode === 'audio' ? 'mp3' : format.ext,
+      size: estimateSize(),
+      audioSize: currentInfo.audioSize,
+    });
+    hideOptions();
+    onStarted();
+  });
 }

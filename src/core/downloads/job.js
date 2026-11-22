@@ -18,7 +18,7 @@ function assertHttpUrl(url) {
 }
 
 function createJob(opts) {
-  if (!MODES.includes(opts.mode)) throw new Error('Geçersiz mod');
+  if (!MODES.includes(opts.mode)) throw new Error('Invalid mode.');
   const url = assertHttpUrl(opts.url);
   return {
     id: randomUUID(), url,

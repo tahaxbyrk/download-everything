@@ -23,7 +23,7 @@ function createYtDlp({ binDir }) {
       child.stderr.on('data', (d) => { err += d; });
       child.on('error', (e) => reject(new Error(spawnError(e))));
       child.on('close', (code) => {
-        if (code !== 0) return reject(new Error(lastError(err) || `yt-dlp ${code} Output with the code.`));
+        if (code !== 0) return reject(new Error(lastError(err) || `yt-dlp exited with code ${code}.`));
         try { resolve(normalizeInfo(JSON.parse(out))); } catch { reject(new Error('The yt-dlp output could not be read.')); }
       });
     });

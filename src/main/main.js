@@ -1,7 +1,8 @@
 'use strict';
 const path = require('path');
-const { app, ipcMain } = require('electron');
+const { app, ipcMain, BrowserWindow } = require('electron');
 const { createYtDlp } = require('../core/ytdlp')
+const { DownloadManager } = require('../core/downloads/manager');
 const { registerIpc } = require('./ipc/ipc.js')
 const { createMainWindow } = require('./window/mainWindow.js');
 
@@ -9,16 +10,27 @@ const binDir = app.isPackaged
   ? path.join(process.resourcesPath, 'bin')
   : path.join(__dirname, '../../bin');
 
-app.whenReady().then(() => {
-    registerIpc({ ipcMain, ytdlp: createYtDlp({ binDir }) });
-    createMainWindow({
+let mainWindow = null;
+
+const openMainWindow = () => {
+    mainWindow = createMainWindow({
         preload: path.join(__dirname, '../preload/preload.js'),
         isDev: !app.isPackaged,
     });
+    mainWindow.on('closed', () => { mainWindow = null; });
+};
+
+app.whenReady().then(() => {
+    const manager = new DownloadManager({
+        ytdlp: createYtDlp({ binDir }),
+        outputDir: app.getPath('downloads'),
+    });
+    registerIpc({ ipcMain, manager, getWindow: () => mainWindow });
+    openMainWindow();
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
-            createMainWindow();
+            openMainWindow();
         }
     });
 });

@@ -57,7 +57,7 @@ class DownloadManager extends EventEmitter {
         const actual = this._fileSize(job.outputPath) || job.downloadedBytes;
         this._setStatus(job, 'completed', { totalBytes: actual, downloadedBytes: actual, speed: 0, eta: 0 });
       } else {
-        this._setStatus(job, 'error', { error: error || `yt-dlp ${code} output with the code.`, speed: 0, eta: 0 });
+        this._setStatus(job, 'error', { error: error || `yt-dlp exited with code ${code}.`, speed: 0, eta: 0 });
       }
       this._schedule();
     });

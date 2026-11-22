@@ -1,14 +1,14 @@
 'use strict';
 
-function assertHttpUrl(url) {
-  let u;
-  try { u = new URL(url); } catch { throw new Error('Invalid connection.'); }
-  if (!['http:', 'https:'].includes(u.protocol)) throw new Error('Only http/https connections are supported.');
-  return u.href;
-}
+function registerIpc({ ipcMain, manager, getWindow }) {
+  ipcMain.handle('info:get', (_e, url) => manager.getInfo(url));
+  ipcMain.handle('download:list', () => manager.list());
+  ipcMain.handle('download:start', (_e, opts) => manager.start(opts));
 
-function registerIpc({ ipcMain, ytdlp }) {
-  ipcMain.handle('info:get', (_e, url) => ytdlp.getInfo(assertHttpUrl(url)));
+  manager.on('update', (job) => {
+    const win = getWindow();
+    if (win && !win.isDestroyed()) win.webContents.send('download:update', job);
+  });
 }
 
 module.exports = { registerIpc };
