@@ -1,8 +1,11 @@
 'use strict';
 const { spawn } = require('child_process');
+const readline = require('readline');
 const path = require('path');
+const { buildArgs } = require('./args');
 const { normalizeInfo } = require('./info');
-const { lastError, spawnError } = require('./procUtils');
+const { parseProgressLine, isPostProcessLine, matchOutputPath } = require('./outputParser');
+const { lastError, spawnError, killTree } = require('./procUtils');
 
 const EXE = process.platform === 'win32' ? '.exe' : '';
 
@@ -26,7 +29,28 @@ function createYtDlp({ binDir }) {
     });
   }
 
-  return { getInfo };
+  function download(job, { outputDir, onProgress, onPhase, onPath }) {
+    const child = spawn(ytdlpPath, buildArgs(job, { outputDir, binDir }), { env, windowsHide: true });
+    let errText = '';
+    child.stderr.setEncoding('utf8');
+    child.stderr.on('data', (d) => { errText += d; });
+
+    readline.createInterface({ input: child.stdout }).on('line', (line) => {
+      const progress = parseProgressLine(line);
+      if (progress) return onProgress(progress);
+      if (isPostProcessLine(line)) onPhase('merging');
+      const file = matchOutputPath(line);
+      if (file) onPath(file);
+    });
+
+    const done = new Promise((resolve) => {
+      child.on('error', (e) => resolve({ code: -1, error: spawnError(e) }));
+      child.on('close', (code) => resolve({ code, error: lastError(errText) }));
+    });
+    return { done, kill: () => killTree(child) };
+  }
+
+  return { getInfo, download };
 }
 
 module.exports = { createYtDlp };
