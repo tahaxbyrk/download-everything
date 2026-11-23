@@ -58,4 +58,5 @@ export function initDownloads() {
   });
 
   refreshCount();
+  backend.list().then((saved) => saved.forEach(upsertRow));
 }

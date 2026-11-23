@@ -2,7 +2,8 @@
 const path = require('path');
 const { app, ipcMain, BrowserWindow } = require('electron');
 const { createYtDlp } = require('../core/ytdlp')
-const { DownloadManager } = require('../core/downloads/manager');
+const { DownloadManager } = require('../core/downloads/manager.js');
+const { createDownloadStore } = require('./services/downloadStore.js');
 const { registerIpc } = require('./ipc/ipc.js')
 const { createMainWindow } = require('./window/mainWindow.js');
 
@@ -24,6 +25,7 @@ const openMainWindow = () => {
 app.whenReady().then(() => {
     manager = new DownloadManager({
         ytdlp: createYtDlp({ binDir }),
+        store: createDownloadStore(),
         outputDir: app.getPath('downloads'),
     });
     registerIpc({ ipcMain, manager, getWindow: () => mainWindow });
@@ -41,3 +43,5 @@ app.on('window-all-closed', () => {
         app.quit();
     }
 });
+
+app.on('before-quit', () => manager?.shutdown());

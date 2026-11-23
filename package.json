@@ -27,5 +27,8 @@
   "homepage": "https://github.com/tahaxbyrk/download-everything#readme",
   "devDependencies": {
     "electron": "^45.4.1"
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0"
   }
 }

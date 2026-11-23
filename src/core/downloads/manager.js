@@ -8,11 +8,18 @@ const { applyProgress } = require('./progress');
 const EMIT_INTERVAL_MS = 250;
 
 class DownloadManager extends EventEmitter {
-  constructor({ ytdlp, outputDir, maxConcurrent = 2 }) {
+  constructor({ ytdlp, store, outputDir, maxConcurrent = 2 }) {
     super();
-    Object.assign(this, { ytdlp, outputDir, maxConcurrent });
+    Object.assign(this, { ytdlp, store, outputDir, maxConcurrent });
     this.jobs = new Map();
     this.runtime = new Map();
+
+    for (const job of this.store.load()) {
+      if (['queued', ...ACTIVE_STATUSES].includes(job.status)) job.status = 'paused';
+      job.speed = 0;
+      job.eta = 0;
+      this.jobs.set(job.id, job);
+    }
   }
 
   list() { return [...this.jobs.values()].map(pub); }
@@ -23,6 +30,7 @@ class DownloadManager extends EventEmitter {
     const job = createJob(opts);
     this.jobs.set(job.id, job);
     this._emit(job);
+    this._persist();
     this._schedule();
     return pub(job);
   }
@@ -55,6 +63,7 @@ class DownloadManager extends EventEmitter {
     if (!job) return;
     this._stop(job);
     this.jobs.delete(id);
+    this._persist();
     this._schedule();
   }
 
@@ -63,6 +72,7 @@ class DownloadManager extends EventEmitter {
       this._stop(job);
       if (['queued', ...ACTIVE_STATUSES].includes(job.status)) job.status = 'paused';
     }
+    this.store.saveNow(this.list());
   }
 
   _schedule() {
@@ -126,9 +136,11 @@ class DownloadManager extends EventEmitter {
   _setStatus(job, status, patch = {}) {
     Object.assign(job, patch, { status });
     this._emit(job);
+    this._persist();
   }
 
   _emit(job) { this.emit('update', pub(job)); }
+  _persist() { this.store.save(this.list()); }
 }
 
 module.exports = { DownloadManager };
