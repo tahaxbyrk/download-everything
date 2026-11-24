@@ -1,12 +1,13 @@
 'use strict';
 const path = require('path');
-const { app, ipcMain, BrowserWindow } = require('electron');
-const { createYtDlp } = require('../core/ytdlp')
+const { app, ipcMain } = require('electron');
+const { createYtDlp } = require('../core/ytdlp');
 const { DownloadManager } = require('../core/downloads/manager.js');
+const { settingsStore } = require('./services/settingsStore.js');
 const { createDownloadStore } = require('./services/downloadStore.js');
-const { initTheme } = require('./services/theme.js')
-const { registerIpc } = require('./ipc/ipc.js')
+const { initTheme } = require('./services/theme.js');
 const { createMainWindow } = require('./window/mainWindow.js');
+const { registerIpc } = require('./ipc/ipc.js');
 
 const binDir = app.isPackaged
   ? path.join(process.resourcesPath, 'bin')
@@ -15,35 +16,31 @@ const binDir = app.isPackaged
 let mainWindow = null;
 let manager = null;
 
-const openMainWindow = () => {
-    mainWindow = createMainWindow({
-        preload: path.join(__dirname, '../preload/preload.js'),
-        isDev: !app.isPackaged,
-    });
-    mainWindow.on('closed', () => { mainWindow = null; });
-};
+function start() {
+  initTheme();
+  manager = new DownloadManager({
+    ytdlp: createYtDlp({ binDir }),
+    store: createDownloadStore(),
+    outputDir: app.getPath('downloads'),
+  });
+  registerIpc({ ipcMain, manager, getWindow: () => mainWindow });
+  mainWindow = createMainWindow({
+    preload: path.join(__dirname, '../preload/preload.js'),
+    isDev: !app.isPackaged,
+    settingsStore,
+  });
+  mainWindow.on('closed', () => { mainWindow = null; });
+}
 
-app.whenReady().then(() => {
-    initTheme();
-    manager = new DownloadManager({
-        ytdlp: createYtDlp({ binDir }),
-        store: createDownloadStore(),
-        outputDir: app.getPath('downloads'),
-    });
-    registerIpc({ ipcMain, manager, getWindow: () => mainWindow });
-    openMainWindow();
-
-    app.on('activate', () => {
-        if (BrowserWindow.getAllWindows().length === 0) {
-            openMainWindow();
-        }
-    });
-});
-
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
-});
-
-app.on('before-quit', () => manager?.shutdown());
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (!mainWindow) return;
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  });
+  app.whenReady().then(start);
+  app.on('before-quit', () => manager?.shutdown());
+  app.on('window-all-closed', () => app.quit());
+}
