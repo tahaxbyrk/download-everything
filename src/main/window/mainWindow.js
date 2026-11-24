@@ -1,9 +1,8 @@
 'use strict'
 const { BrowserWindow } = require('electron');
-const path = require('path');
 const { getInitialState, trackWindowState } = require('./windowState.js');
 
-const createMainWindow = ({ preload, isDev, settingsStore }) => {
+const createMainWindow = ({ preload, indexHtml, isDev, settingsStore }) => {
     const state = getInitialState(settingsStore);
     const window = new BrowserWindow({
         width: state.width, height: state.height, x: state.x, y: state.y,
@@ -22,7 +21,7 @@ const createMainWindow = ({ preload, isDev, settingsStore }) => {
     trackWindowState(window, settingsStore);
 
     window.once('ready-to-show', () => window.show());
-    window.loadFile(path.join(__dirname, '../../renderer/index.html'));
+    window.loadFile(indexHtml);
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
     window.webContents.on('will-navigate', (event) => event.preventDefault());
     return window;

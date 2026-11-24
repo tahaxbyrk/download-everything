@@ -1,31 +1,29 @@
 'use strict';
-const path = require('path');
 const { app, ipcMain } = require('electron');
 const { createYtDlp } = require('../core/ytdlp');
 const { DownloadManager } = require('../core/downloads/manager.js');
 const { settingsStore } = require('./services/settingsStore.js');
 const { createDownloadStore } = require('./services/downloadStore.js');
+const { resolvePaths } = require('./services/paths.js');
 const { initTheme } = require('./services/theme.js');
 const { createMainWindow } = require('./window/mainWindow.js');
 const { registerIpc } = require('./ipc/ipc.js');
-
-const binDir = app.isPackaged
-  ? path.join(process.resourcesPath, 'bin')
-  : path.join(__dirname, '../../bin');
 
 let mainWindow = null;
 let manager = null;
 
 function start() {
-  initTheme();
-  manager = new DownloadManager({
-    ytdlp: createYtDlp({ binDir }),
+    const paths = resolvePaths(app);
+    initTheme();
+    manager = new DownloadManager({
+    ytdlp: createYtDlp({ binDir: paths.binDir }),
     store: createDownloadStore(),
-    outputDir: app.getPath('downloads'),
+    outputDir: paths.downloadDir,
   });
   registerIpc({ ipcMain, manager, getWindow: () => mainWindow });
   mainWindow = createMainWindow({
-    preload: path.join(__dirname, '../preload/preload.js'),
+    preload: paths.preload,
+    indexHtml: paths.indexHtml,
     isDev: !app.isPackaged,
     settingsStore,
   });
