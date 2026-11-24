@@ -4,6 +4,7 @@ const { app, ipcMain, BrowserWindow } = require('electron');
 const { createYtDlp } = require('../core/ytdlp')
 const { DownloadManager } = require('../core/downloads/manager.js');
 const { createDownloadStore } = require('./services/downloadStore.js');
+const { initTheme } = require('./services/theme.js')
 const { registerIpc } = require('./ipc/ipc.js')
 const { createMainWindow } = require('./window/mainWindow.js');
 
@@ -23,6 +24,7 @@ const openMainWindow = () => {
 };
 
 app.whenReady().then(() => {
+    initTheme();
     manager = new DownloadManager({
         ytdlp: createYtDlp({ binDir }),
         store: createDownloadStore(),

@@ -1,4 +1,6 @@
 'use strict';
+const { settingsStore } = require('../services/settingsStore.js');
+const { setTheme } = require('../services/theme.js');
 
 function registerIpc({ ipcMain, manager, getWindow }) {
   ipcMain.handle('info:get', (_e, url) => manager.getInfo(url));
@@ -8,6 +10,9 @@ function registerIpc({ ipcMain, manager, getWindow }) {
   ipcMain.handle('download:resume', (_e, id) => manager.resume(id));
   ipcMain.handle('download:cancel', (_e, id) => manager.cancel(id));
   ipcMain.handle('download:remove', (_e, id) => manager.remove(id));
+
+  ipcMain.handle('settings:get', () => ({ theme: settingsStore.get('theme') }));
+  ipcMain.handle('settings:setTheme', (_e, theme) => setTheme(theme));
 
   manager.on('update', (job) => {
     const win = getWindow();

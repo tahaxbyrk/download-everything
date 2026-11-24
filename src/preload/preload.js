@@ -12,4 +12,7 @@ contextBridge.exposeInMainWorld('api', {
   onUpdate: (callback) => {
     ipcRenderer.on('download:update', (_event, job) => callback(job));
   },
+
+  getSettings: () => ipcRenderer.invoke('settings:get'),
+  setTheme: (theme) => ipcRenderer.invoke('settings:setTheme', theme),
 });
