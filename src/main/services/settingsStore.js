@@ -15,7 +15,7 @@ const settingsStore = new Store({
         height: { type: 'number', minimum: 300 },
         isMaximized: { type: 'boolean' },
       },
-      default: { width: 800, height: 600, isMaximized: false },
+      default: { width: 900, height: 700, isMaximized: false },
     },
   },
 });
