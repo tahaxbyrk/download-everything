@@ -1,5 +1,5 @@
 'use strict'
-const { BrowserWindow } = require('electron');
+const { BrowserWindow, app } = require('electron');
 const { getInitialState, trackWindowState } = require('./windowState.js');
 
 const createMainWindow = ({ preload, indexHtml, isDev, settingsStore }) => {
@@ -20,6 +20,7 @@ const createMainWindow = ({ preload, indexHtml, isDev, settingsStore }) => {
     if (state.isMaximized) window.maximize();
     trackWindowState(window, settingsStore);
 
+    if (app.isPackaged) window.setMenu(null);
     window.once('ready-to-show', () => window.show());
     window.loadFile(indexHtml);
     window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
