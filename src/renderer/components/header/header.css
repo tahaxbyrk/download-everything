@@ -16,29 +16,19 @@
     margin: 0; 
     font-size: 1.15rem; 
     font-weight: 600; 
-}
-
-.theme { 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    color: var(--muted); 
-}
-
-.theme select { 
-    padding: 4px 8px; 
-}
-
-.top h1 { 
-    margin: 0 0 12px; 
-    font-size: 1.15rem; 
-    font-weight: 600; 
     user-select: none;
 }
 
 .urlform { 
     display: flex; 
     gap: 8px; 
+}
+
+.urlform input,
+.urlform button {
+    height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .urlform input { 

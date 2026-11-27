@@ -9,14 +9,12 @@
 </head>
 <body>
     <header class="top">
-    <h1 id="title">Start downloading</h1>
-      <label class="theme">Theme
-        <select id="theme">
-          <option value="system">System</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </label>
+    <div class="top-row">
+      <h1 id="title">Start downloading</h1>
+      <button id="settingsBtn" class="icon-btn" type="button" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M9.93 4.27 L10.43 1.52 L13.57 1.52 L14.07 4.27 L16.00 5.07 L18.31 3.48 L20.52 5.69 L18.93 8.00 L19.73 9.93 L22.48 10.43 L22.48 13.57 L19.73 14.07 L18.93 16.00 L20.52 18.31 L18.31 20.52 L16.00 18.93 L14.07 19.73 L13.57 22.48 L10.43 22.48 L9.93 19.73 L8.00 18.93 L5.69 20.52 L3.48 18.31 L5.07 16.00 L4.27 14.07 L1.52 13.57 L1.52 10.43 L4.27 9.93 L5.07 8.00 L3.48 5.69 L5.69 3.48 L8.00 5.07 Z M15.30 12 A3.3 3.3 0 1 0 8.70 12 A3.3 3.3 0 1 0 15.30 12 Z"/></svg>
+      </button>
+    </div>
     <form id="urlForm" class="urlform">
       <label class="sr" for="url">Video URL</label>
       <input id="url" type="url" placeholder="Paste the video link here." autocomplete="off" spellcheck="false" required>
@@ -60,6 +58,29 @@
         <p id="empty" class="empty">No download yet. Paste a link above.</p>
       </section>
     </main>
+
+    <dialog id="settingsDialog" class="settings" aria-labelledby="settingsTitle">
+      <div class="settings-panel">
+        <div class="settings-head">
+          <h2 id="settingsTitle">Settings</h2>
+          <button id="settingsClose" class="icon-btn" type="button" aria-label="Close">&times;</button>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Settings sections">
+          <button id="tab-general" class="tab" role="tab" type="button" aria-selected="true" aria-controls="panel-general">General</button>
+        </div>
+        <div id="panel-general" class="tab-panel" role="tabpanel" aria-labelledby="tab-general">
+          <div class="setting-row">
+            <label for="themeSelect">Theme</label>
+            <select id="themeSelect">
+              <option value="system">System</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+        </div>
+        <p id="settingsMsg" class="msg" role="status"></p>
+      </div>
+    </dialog>
 
     <template id="rowTpl">
       <li class="row" data-status="">

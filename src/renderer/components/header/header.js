@@ -4,7 +4,6 @@ const form = document.querySelector('#urlForm');
 const urlInput = document.querySelector('#url');
 const fetchBtn = document.querySelector('#fetchBtn');
 const msg = document.querySelector('#msg');
-const themeSelect = document.querySelector('#theme');
 
 function setMsg(text, isError = false) {
   msg.textContent = text;
@@ -31,7 +30,4 @@ export function initHeader({ onInfo, onError }) {
       fetchBtn.disabled = false;
     }
   });
-
-  backend.getSettings().then((s) => { themeSelect.value = s.theme; });
-  themeSelect.addEventListener('change', () => backend.setTheme(themeSelect.value));
 }

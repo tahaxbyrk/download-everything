@@ -2,7 +2,7 @@ input[type=url], select {
   font: inherit; 
   color: inherit; 
   background: var(--bg);
-  border: 1px solid var(--line); 
+  border: 1px solid var(--field-border); 
   border-radius: var(--radius); 
   padding: 9px 12px;
 }
@@ -21,3 +21,26 @@ button {
 button:hover { border-color: var(--muted); }
 button:disabled { opacity: .5; cursor: default; }
 button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--muted);
+  border-color: transparent;
+}
+
+.icon-btn:hover {
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+}

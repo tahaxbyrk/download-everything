@@ -1,0 +1,71 @@
+.settings {
+    width: min(560px, calc(100vw - 32px));
+    padding: 0;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.settings::backdrop {
+    backdrop-filter: blur(5px);
+}
+
+.settings-panel {
+    padding: 16px 24px 20px;
+}
+
+.settings-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 12px;
+}
+
+.settings-head h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.tabs {
+    display: flex;
+    gap: 4px;
+    margin: 0 0 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.tab {
+    margin-bottom: -1px;
+    padding: 8px 14px;
+    color: var(--muted);
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+}
+
+.tab:hover {
+    color: var(--ink);
+}
+
+.tab[aria-selected="true"] {
+    color: var(--ink);
+    font-weight: 600;
+    border-bottom-color: var(--accent);
+}
+
+.tab-panel {
+    min-height: 140px;
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 40px;
+}
+
+.setting-row select {
+    min-width: 140px;
+}

@@ -5,6 +5,7 @@
   --ink: #17212B; 
   --muted: #5A6978; 
   --line: #D3DAE1;
+  --field-border: #AAB6C2;
   --accent: #2748E8; 
   --accent-ink: #FFFFFF;
   --ok: #1F7A52; 
@@ -19,6 +20,7 @@
     --ink: #E7ECF1; 
     --muted: #97A5B3; 
     --line: #2F3A46;
+    --field-border: #4B5A69;
     --accent: #7F96FF; 
     --accent-ink: #10161D;
     --ok: #5CC596; 
